@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:latest
+    # restart: always  # ให้ PostgreSQL เริ่มทำงานอัตโนมัติเมื่อรีบูตเครื่อง
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydb
+    ports:
+      - "5433:5432" 
+      # Docker ใช้ network isolation
+      # ทำให้ container สามารถใช้พอร์ต 5432 ภายใน container ได้โดยไม่มีปัญหา แม้ว่า PostgreSQL ที่รันบนเครื่องใช้ 5432 เหมือนกัน
+      # ถ้า expose พอร์ตเดียวกัน (-p 5432:5432) อาจชนกับ PostgreSQL ที่รันบนเครื่อง
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+  pgadmin:
+    image: dpage/pgadmin4
+    # restart: always  # ให้ pgAdmin เริ่มทำงานอัตโนมัติเมื่อรีบูตเครื่อง
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+volumes:
+  postgres-data:
