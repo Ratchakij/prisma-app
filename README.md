@@ -1,6 +1,10 @@
-# Next.js + Prisma + postgreSQL&pgAdmin
+# Next.js + Prisma
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+
+## Description
+
+Use PostgreSQL(pgAdmin) with Docker
 
 ## Getting Started
 
@@ -58,6 +62,9 @@ npm install @prisma/client
 npx prisma init
 npx prisma migrate dev --name init
 npx prisma generate
+
+// Axios
+npm i axios
 
 ## Command
 docker ps -a // Check container info
