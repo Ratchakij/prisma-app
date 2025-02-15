@@ -1,20 +1,36 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
+
+type Category = { id: number; name: string };
 
 const Create = () => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
-    const [category, setCategory] = useState('');
+    const [categoryId, setCategoryId] = useState('');
+    const [categories, setCategories] = useState<Category[]>([]);
     const router = useRouter();
+
+    const fetchCategories = async () => {
+        try {
+            const res = await axios.get(`/api/categories`);
+            setCategories(res.data);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    useEffect(() => {
+        fetchCategories();
+    }, [])
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         try {
-            await axios.post('/api/posts', { title, content, category });
+            await axios.post('/api/posts', { title, content, categoryId });
             router.push('/');
         } catch (error) {
             console.error(error);
@@ -60,16 +76,15 @@ const Create = () => {
                     ></textarea>
                 </div>
                 <div>
-                    <label>Category</label>
                     <select
-                        value={category}
-                        onChange={(e) => setCategory(e.target.value)}
+                        value={categoryId}
+                        onChange={(e) => setCategoryId(e.target.value)}
                         className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     >
-                        <option value="">Select a category</option>
-                        {/* Example static categories, replace or populate dynamically */}
-                        <option value="Tech">Tech</option>
-                        <option value="Lifestyle">Lifestyle</option>
+                        <option value="">Select Category</option>
+                        {categories.map((cat) => (
+                            <option key={cat.id} value={cat.id}>{cat.name}</option>
+                        ))}
                     </select>
                 </div>
                 <div>

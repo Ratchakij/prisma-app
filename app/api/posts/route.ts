@@ -1,6 +1,5 @@
 import { type NextRequest } from "next/server";
 import { PrismaClient } from "@prisma/client";
-import { title } from "process";
 
 const prisma = new PrismaClient();
 
@@ -12,7 +11,9 @@ export async function GET(request: NextRequest) {
 
    let whereCondition = category
       ? {
-           category,
+           category: {
+              is: { name: category },
+           },
            title: {
               contains: search,
               mode: "insensitive",
@@ -25,17 +26,22 @@ export async function GET(request: NextRequest) {
            },
         };
 
-   const posts = await prisma.post.findMany({
-      where: whereCondition as any,
-      orderBy: {
-         createdAt: sort,
-      } as any,
-      include: {
-         category: true,
-      },
-   });
-
-   return Response.json(posts);
+   try {
+      const posts = await prisma.post.findMany({
+         where: whereCondition as any,
+         include: {
+            category: true, // Include category data in the response
+         },
+         orderBy: {
+            createdAt: sort,
+         } as any,
+      });
+      return Response.json(posts);
+   } catch (error) {
+      return new Response(error as BodyInit, {
+         status: 500,
+      });
+   }
 }
 
 export async function POST(request: Request) {
