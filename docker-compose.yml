@@ -4,25 +4,33 @@ services:
     image: postgres:latest
     # restart: always  # ให้ PostgreSQL เริ่มทำงานอัตโนมัติเมื่อรีบูตเครื่อง
     environment:
-      POSTGRES_USER: myuser
-      POSTGRES_PASSWORD: mypassword
-      POSTGRES_DB: mydb
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     ports:
-      - "5433:5432" 
+      - "5433:5432"
       # Docker ใช้ network isolation
       # ทำให้ container สามารถใช้พอร์ต 5432 ภายใน container ได้โดยไม่มีปัญหา แม้ว่า PostgreSQL ที่รันบนเครื่องใช้ 5432 เหมือนกัน
       # ถ้า expose พอร์ตเดียวกัน (-p 5432:5432) อาจชนกับ PostgreSQL ที่รันบนเครื่อง
     volumes:
       - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   pgadmin:
     image: dpage/pgadmin4
     # restart: always  # ให้ pgAdmin เริ่มทำงานอัตโนมัติเมื่อรีบูตเครื่อง
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: root
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
     ports:
       - "5050:80"
     depends_on:
-      - postgres
+      # - postgres
+      postgres:
+        condition: service_healthy
 volumes:
   postgres-data:

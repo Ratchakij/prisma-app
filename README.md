@@ -70,16 +70,20 @@ npm i axios
 
 ## Command
 docker ps -a // Check container info
-docker start my_postgres pgadmin // Start container (my_postgres, pgadmin) 
-docker-compose up -d // ไม่ Rebuild image, เมื่อมีการเปลี่ยนแปลงเฉพาะใน docker-compose.yml
-docker-compose up -d --build // Rebuild image, เมื่อมีการเปลี่ยนแปลงใน Dockerfile, image, docker-compose.yml
+docker start my_postgres pgadmin // Start container (my_postgres, pgadmin)
+
 docker-compose down // หยุดและลบคอนเทนเนอร์ทั้งหมด
-docker-compose down --rmi all --volumes --remove-orphans // ลบทุกอย่าง แล้วเริ่มใหม่หมด
-✅ ลบ container ทั้งหมด
-✅ ลบ image ที่เกี่ยวข้อง
-✅ ลบ volumes (ข้อมูลถาวรใน database/container)
-✅ ลบ orphan containers (container ที่ไม่ได้ถูกใช้แล้ว)
+docker-compose down -v // ลบข้อมูลที่เก็บอยู่ใน volume (ล้าง database)
+docker-compose down --rmi all --volumes --remove-orphans /* 
+    ลบทุกอย่าง แล้วเริ่มใหม่หมด
+    ✅ ลบ container ทั้งหมด
+    ✅ ลบ image ที่เกี่ยวข้อง
+    ✅ ลบ volumes (ข้อมูลถาวรใน database/container)
+    ✅ ลบ orphan containers (container ที่ไม่ได้ถูกใช้แล้ว)
+ */
+
+docker-compose up -d // ไม่ Rebuild image(ไม่ทำลายข้อมูล), ใช้เมื่อ ไม่ได้แก้ไขโค้ดใน Dockerfile แต่แค่ต้องการรันใหม่
+docker-compose up -d --build // Rebuild image(ไม่ทำลายข้อมูล), ใช้เมื่อมีการเปลี่ยนแปลงใน Dockerfile, image, docker-compose.yml
 
 npx prisma migrate dev --name "addPostTable"
 npx prisma generate
-
