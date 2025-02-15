@@ -60,7 +60,9 @@ docker ps
 npm install prisma --save-dev
 npm install @prisma/client
 npx prisma init
-npx prisma migrate dev --name init
+npx prisma migrate dev
+npx prisma migrate dev --name "init"
+npx prisma migrate dev --name "update model" --create-only
 npx prisma generate
 
 // Axios

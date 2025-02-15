@@ -5,18 +5,19 @@ import axios from 'axios'
 import { useRouter } from 'next/navigation'
 
 const Create = () => {
-    const [title, setTitle] = useState('')
-    const [content, setContent] = useState('')
-    const router = useRouter()
+    const [title, setTitle] = useState('');
+    const [content, setContent] = useState('');
+    const [category, setCategory] = useState('');
+    const router = useRouter();
 
     const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
+        e.preventDefault();
 
         try {
-            await axios.post('/api/posts', { title, content })
-            router.push('/')
+            await axios.post('/api/posts', { title, content, category });
+            router.push('/');
         } catch (error) {
-            console.error(error)
+            console.error(error);
         }
     }
 
@@ -57,6 +58,19 @@ const Create = () => {
                         onChange={(e) => setContent(e.target.value)}
                         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     ></textarea>
+                </div>
+                <div>
+                    <label>Category</label>
+                    <select
+                        value={category}
+                        onChange={(e) => setCategory(e.target.value)}
+                        className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    >
+                        <option value="">Select a category</option>
+                        {/* Example static categories, replace or populate dynamically */}
+                        <option value="Tech">Tech</option>
+                        <option value="Lifestyle">Lifestyle</option>
+                    </select>
                 </div>
                 <div>
                     <button
