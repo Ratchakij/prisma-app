@@ -58,7 +58,7 @@ docker ps
 
 // Prisma
 npm install prisma --save-dev
-npm install @prisma/client
+npm install @prisma/client // สำหรับใช้ใน Next.js ทำการลงไว้ก่อนเลย
 npx prisma init
 npx prisma migrate dev
 npx prisma migrate dev --name "init"
@@ -68,9 +68,16 @@ npx prisma generate
 // Axios
 npm i axios
 
+// Auth -> Prisma
+npm install bcrypt
+npm install --save-dev @types/bcrypt
+npm install next-auth
+npm install @auth/prisma-adapter
+
 ## Command
 docker ps -a // Check container info
-docker start my_postgres pgadmin // Start container (my_postgres, pgadmin)
+docker start 28a0d92aeeba 935e7234c71d
+docker restart prisma-app-postgres-1 prisma-app-pgadmin-1
 
 docker-compose down // หยุดและลบคอนเทนเนอร์ทั้งหมด
 docker-compose down -v // ลบข้อมูลที่เก็บอยู่ใน volume (ล้าง database)

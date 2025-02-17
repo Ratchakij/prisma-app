@@ -2,11 +2,16 @@
 
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
+import { useSession, signOut } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
 type Category = { id: number; name: string };
 
 export default function Home() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
   const [posts, setPosts] = useState([]);
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('');
@@ -34,9 +39,12 @@ export default function Home() {
   }
 
   useEffect(() => {
+    if (status === 'unauthenticated') {
+      return router.push('/login');
+    }
     fetchPosts();
     fetchCategories();
-  }, [])
+  }, [status, router])
 
   const handleApplyFilters = () => {
     fetchPosts();
@@ -53,8 +61,26 @@ export default function Home() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
-      <h1 className="text-2xl font-semibold mb-6">Blog Posts</h1>
+    session?.user && <div className="max-w-6xl mx-auto px-4 py-8">
+      <div className="max-w-6xl mx-auto flex justify-between items-center py-4">
+        {/* <div className="text-right"> */}
+        <h1 className="text-2xl font-semibold">Blog Posts</h1>
+
+        <div className="flex justify-end items-center space-x-2">
+          <button onClick={() => { router.push('/profile'); }}>
+            Welcome, <b >{session.user.name}!</b>
+          </button>
+          <p>Email: {session.user.email}</p>
+          <p>Role: {session.user.role}</p>
+          <button
+            onClick={() => signOut({ callbackUrl: '/login' })}
+            className="bg-blue-500 text-white py-2 px-4 rounded"
+          >
+            Logout
+          </button>
+        </div>
+      </div>
+
       <div className="flex justify-between items-center mb-6">
         <div className="flex gap-4">
           <input
@@ -152,6 +178,6 @@ export default function Home() {
       >
         Create a New Post
       </Link>
-    </div>
+    </div >
   );
 }

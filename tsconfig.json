@@ -1,27 +1,27 @@
 {
-  "compilerOptions": {
-    "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
-    "paths": {
-      "@/*": ["./*"]
-    }
-  },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+   "compilerOptions": {
+      "target": "ES2017",
+      "lib": ["dom", "dom.iterable", "esnext"],
+      "allowJs": true,
+      "skipLibCheck": true,
+      "strict": true,
+      "noEmit": true,
+      "esModuleInterop": true,
+      "module": "esnext",
+      "moduleResolution": "bundler",
+      "resolveJsonModule": true,
+      "isolatedModules": true,
+      "jsx": "preserve",
+      "incremental": true,
+      "plugins": [{ "name": "next" }],
+      "paths": {
+         "@/*": ["./*"]
+      },
+      /* types: กำหนดให้โหลดเฉพาะ Type Definitions ที่ระบุ */
+      "types": ["next-auth"], // คำสั่งนี้บอก TypeScript ว่าให้โหลด เฉพาะ Type Definitions (.d.ts) ที่เกี่ยวข้องกับ next-auth
+      /* typeRoots: ระบุโฟลเดอร์ที่เก็บ Type Definitions */
+      "typeRoots": ["./types", "./node_modules/@types"] // บอก TypeScript ว่าให้มองหา Type Definitions ในโฟลเดอร์ที่กำหนดเท่านั้น
+   },
+   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+   "exclude": ["node_modules"]
 }
