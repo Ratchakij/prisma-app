@@ -74,6 +74,10 @@ npm install --save-dev @types/bcrypt
 npm install next-auth
 npm install @auth/prisma-adapter
 
+// Google Sign in
+Create&Config Google OAuth for Google Provider -> Client ID, Client secret
+Add GoogleProvider from 'next-auth/providers/google'
+
 ## Command
 docker ps -a // Check container info
 docker start 28a0d92aeeba 935e7234c71d

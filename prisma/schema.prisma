@@ -30,12 +30,33 @@ model Category {
 
 //
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String?
-  email     String   @unique
-  password  String
-  image     String?
-  role      String   @default("member")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            Int       @id @default(autoincrement())
+  name          String?
+  email         String    @unique
+  password      String?
+  image         String?
+  role          String    @default("member") // Add a role field
+  emailVerified DateTime? // เก็บ DateTime ของ email ที่ทำการ verified
+  accounts      Account[] // ผูก User เข้ากับ Account(Provider) เพื่อบอกว่า ผู้ใช้หนึ่งคนสามารถมีหลายบัญชีที่เชื่อมโยงกับบัญชีนั้น (เช่น บัญชีของผู้ใช้ในระบบ OAuth ต่าง ๆ เช่น Google, Facebook, ฯลฯ)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            Int
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
 }
